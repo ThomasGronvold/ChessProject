@@ -19,28 +19,35 @@ namespace ChessProject
 
             while (gameRunning)
             {
+                /* Much repetition, No error handeling, index out of range,   */
+
+                Console.Write("Piece To Move Cord: ");
                 var choosePiece = Console.ReadLine();
                 int ChosenRowCord = GetCommandInt(numberRange, choosePiece[1]);
                 int ChosenColCord = GetCommandInt(letterRange, choosePiece[0]);
-                
 
+                /* Creates MarkerPieces and highlight selected piece in the 2dArray */
                 chessBoard.HighlightPiece(ChosenRowCord, ChosenColCord);
-
-                chessBoard.UpdateBoard();
+                chessBoard.MarkValidMoves(ChosenRowCord, ChosenColCord);
                 
+                chessBoard.UpdateBoard();
 
-                //var moveCord = Console.ReadLine();
+                /* Removes markerpieces and highlight */
+                chessBoard.HighlightPiece(ChosenRowCord, ChosenColCord);
+                chessBoard.MarkValidMoves(ChosenRowCord, ChosenColCord);
 
-                //if (choosePiece.Length != 2 ||
-                //    moveCord.Length != 2 ||
-                //    !letterRange.Contains(choosePiece[0]) ||
-                //    !letterRange.Contains(moveCord[0]) ||
-                //    !numberRange.Contains(choosePiece[1]) ||
-                //    !numberRange.Contains(choosePiece[1])) continue;
-
-
-
-                chessBoard.MovePiece(ChosenRowCord, ChosenColCord);
+                /* This Next <-------------- */
+                int moveRowCord;
+                int moveColCord;
+                do
+                {
+                    Console.Write("Where To Move Cord: ");
+                    var moveCord = Console.ReadLine(); 
+                    moveRowCord = GetCommandInt(numberRange, moveCord[1]);
+                    moveColCord = GetCommandInt(letterRange, moveCord[0]);
+                } while (!chessBoard.IsValidMove(moveRowCord, moveColCord));
+                
+                chessBoard.MovePiece(ChosenRowCord, ChosenColCord, moveRowCord, moveColCord);
             }
         }
 
@@ -69,3 +76,10 @@ namespace ChessProject
 //
 //    a  b  c  d  e  f  g  h
 //");
+
+//if (choosePiece.Length != 2 ||
+//    moveCord.Length != 2 ||
+//    !letterRange.Contains(choosePiece[0]) ||
+//    !letterRange.Contains(moveCord[0]) ||
+//    !numberRange.Contains(choosePiece[1]) ||
+//    !numberRange.Contains(choosePiece[1])) continue;

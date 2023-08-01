@@ -4,7 +4,7 @@ public abstract class ChessPiece
 {
     /* BaseClass for every chess piece. */
     protected ChessBoard.PieceType type;
-    protected ChessBoard.PieceColor color;
+    public ChessBoard.PieceColor color;
     protected int pieceValue;
     protected bool isHighlighted;
 
@@ -14,20 +14,18 @@ public abstract class ChessPiece
         this.color = color;
         this.pieceValue = pieceValue;
         isHighlighted = false;
-
     }
 
-    
-    public abstract void Move();
+    public abstract List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol);
 
     public abstract char Piece();
 
-    public virtual void ToggleHighlight()
+    public void ToggleHighlight()
     {
         isHighlighted = !isHighlighted;
     }
 
-    public virtual bool CheckHighlight()
+    public bool CheckHighlight()
     {
         return isHighlighted;
     }
