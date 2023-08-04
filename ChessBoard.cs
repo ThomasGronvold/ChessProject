@@ -8,14 +8,19 @@ public class ChessBoard
     private readonly int rows;
     private readonly int cols;
     private readonly bool _playersPieceColor;
+    private readonly PieceColor _playerColor;
+    private readonly PieceColor _opponentColor;
     private List<(int, int)> validMoves;
+    private int boardSize = 8;
 
     public ChessBoard(bool playersPieceColor)
     {
-        _board = new ChessPiece[8, 8];
+        _board = new ChessPiece[boardSize, boardSize];
         rows = _board.GetLength(0);
         cols = _board.GetLength(1);
         _playersPieceColor = playersPieceColor;
+        _playerColor = _playersPieceColor ? PieceColor.White : PieceColor.Black;
+        _opponentColor = _playersPieceColor ? PieceColor.Black : PieceColor.White;
         InitializePieces();
         ReverseRows(_board);
         UpdateBoard();
@@ -24,44 +29,33 @@ public class ChessBoard
     private void InitializePieces()
     {
         /* Init player Pawns */
-        var playerColor = _playersPieceColor ? PieceColor.White : PieceColor.Black;
-        var opponentColor = _playersPieceColor ? PieceColor.Black : PieceColor.White;
+        for (int col = 0; col < 8; col++) _board[1, col] = new Pawn(_opponentColor);
+        for (int col = 0; col < 8; col++) _board[6, col] = new Pawn(_playerColor);
 
-        for (int col = 0; col < 8; col++) _board[1, col] = new Pawn(opponentColor);
-        for (int col = 0; col < 8; col++) _board[6, col] = new Pawn(playerColor);
+        /* For testing */
+        _board[5, 1] = new Pawn(_opponentColor);
     }
 
     public void UpdateBoard()
     {
         Console.Clear();
-
         for (int row = rows - 1; row >= 0; row--)
         {
-            Console.WriteLine();
             for (int col = 0; col < cols; col++)
             {
-                /* Sets the background color of a square */
-                if (_board[row, col] != null && _board[row, col].CheckHighlight())
-                {
-                    Console.BackgroundColor = ConsoleColor.DarkYellow;
-                }
-                else
-                {
-                    Console.BackgroundColor = (row + col) % 2 == 0 ? ConsoleColor.DarkRed : ConsoleColor.Black;
-                }
+                var isNull = _board[row, col] != null; /* Checks if current square in the array is empty or has a piece in it */
+                
+                Console.BackgroundColor =
+                    isNull && _board[row, col].CheckHighlight() ?  ConsoleColor.DarkYellow : /* Checks if the piece is the selected piece (to be moved) */
+                    isNull && _board[row, col].CheckCanBeCaptured() ? ConsoleColor.Cyan : /* Checks if the current piece can be captured by the selected piece */
+                    (row + col) % 2 == 0 ? ConsoleColor.DarkRed : ConsoleColor.Black; /* If there is no piece, the color of the square will alternate between darkRed/Black */
 
-                /* Looks into the array for pieces that match pieces, then print them. */
-                if (_board[row, col] != null)
-                {
-                    Console.Write(" " + _board[row, col].Piece() + " ");
-                }
-                else
-                {
-                    Console.Write("   ");
-                }
+                Console.Write(isNull ? " " + _board[row, col].Piece() + " " : "   "); /* Looks into the array for pieces, then print them. */
             }
+            Console.ResetColor();
+            Console.WriteLine(" " + (char)('1' + row));
         }
-        Console.ResetColor();
+        Console.Write(" a  b  c  d  e  f  g  h");
         Console.WriteLine();
     }
 
@@ -71,7 +65,7 @@ public class ChessBoard
         {
             for (int col = 0; col < cols; col++)
             {
-                // Swap elements in the row
+                // Swap elements in the row (Swaps the board around)
                 (array[row, col], array[rows - row - 1, col]) = (array[rows - row - 1, col], array[row, col]);
             }
         }
@@ -82,23 +76,21 @@ public class ChessBoard
         var selectedPiece = _board[selectedRow, selectedCol];
         validMoves = selectedPiece.GetValidMoves(_board, selectedRow, selectedCol);
 
-        int originalCursorTop = Console.CursorTop;
-        int originalCursorLeft = Console.CursorLeft;
-
         foreach ((int row, int col) in validMoves)
         {
-            if (_board[row, col] != null)
+            if (_board[row, col] == null)
             {
-                Console.SetCursorPosition(col, row);
-                Console.BackgroundColor = ConsoleColor.DarkGreen;
-                Console.Write(" " + _board[row, col].Piece() + " ");
+                _board[row, col] = new MarkerPiece();
+            }
+            else if (_board[row, col].type == PieceType.Marker)
+            {
+                _board[row, col] = null;
+            }
 
-            }
-            else
+            if (_board[row, col] != null && _board[row, col].color == _opponentColor)
             {
-                _board[row, col] = _board[row, col] == null ? new MarkerPiece() : null;
+                _board[row, col].ToggleCanBeCaptured();
             }
-            Console.SetCursorPosition(originalCursorLeft, originalCursorTop);
         }
     }
 
@@ -138,40 +130,3 @@ public class ChessBoard
         None
     }
 }
-
-/* Se på null, lage en null metode? */
-
-
-//private void InitializeBoard()
-//{
-//    for (int i = 0; i < rows / 2; i++)
-//    {
-//        for (int j = 0; j < cols; j++)
-//        {
-//            (_board[i, j], _board[rows - 1 - i, j]) = (_board[rows - 1 - i, j], _board[i, j]);
-//        }
-//    }
-
-//    for (int row = 0; row < rows; row++)
-//    {
-//        Console.WriteLine();
-
-//        for (int col = 0; col < cols; col++)
-//        {
-//            Console.BackgroundColor = (row + col) % 2 == 0 ? ConsoleColor.DarkRed : ConsoleColor.Black;
-
-//            /* Looks into the array for pieces that match Pawns, then print them. */
-//            if (_board[row, col] is Pawn)
-//            {
-//                Console.Write(" " + _board[row, col].Piece() + " ");
-//            }
-//            else
-//            {
-//                Console.Write("   ");
-//            }
-//        }
-//    }
-//    Console.ResetColor();
-//    Console.WriteLine();
-//}
-

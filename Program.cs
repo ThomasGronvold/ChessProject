@@ -62,24 +62,3 @@ namespace ChessProject
         }
     }
 }
-
-
-//Console.WriteLine(@"
-//8  [♜][♞][♝][♛][♚][♝][♞][♜]
-//7  [♟][♟][♟][♟][♟][♟][♟][♟]    
-//6  [ ][ ][ ][ ][ ][ ][ ][ ]
-//5  [ ][ ][ ][ ][ ][ ][ ][ ]
-//4  [ ][ ][ ][ ][ ][ ][ ][ ]
-//3  [ ][ ][ ][ ][ ][ ][ ][ ]
-//2  [♙][♙][♙][♙][♙][♙][♙][♙]
-//1  [♖][♘][♗][♚][♛][♗][♘][♖]
-//
-//    a  b  c  d  e  f  g  h
-//");
-
-//if (choosePiece.Length != 2 ||
-//    moveCord.Length != 2 ||
-//    !letterRange.Contains(choosePiece[0]) ||
-//    !letterRange.Contains(moveCord[0]) ||
-//    !numberRange.Contains(choosePiece[1]) ||
-//    !numberRange.Contains(choosePiece[1])) continue;
