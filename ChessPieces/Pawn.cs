@@ -42,3 +42,12 @@ public class Pawn : ChessPiece
         return (color == PieceColor.White) ? '♙' : '♟';
     }
 }
+
+/*
+        Pawn
+        Cant make illegal moves (move makes king check)
+        if enemy pawn moved 2 and landed next you your own pawn, you can en passant
+        if enemy piece is on diagonal infront of pawn, it can attack
+        if on start row, can move 2 forward unless blocked
+        else can move 1 forward unless blocked
+*/

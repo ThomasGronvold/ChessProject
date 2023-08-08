@@ -3,11 +3,11 @@
 public abstract class ChessPiece
 {
     /* BaseClass for every chess piece. */
-    public ChessBoard.PieceType type { get; private set; }
-    public ChessBoard.PieceColor color { get; private set; }
+    public ChessBoard.PieceType type { get; }
+    public ChessBoard.PieceColor color;
     protected int pieceValue;
-    public bool isHighlighted { get; private set; }
-    public bool canBeCaptured { get; private set; }
+    protected bool isHighlighted;
+    protected bool canBeCaptured;
 
     protected ChessPiece(ChessBoard.PieceType type, ChessBoard.PieceColor color, int pieceValue)
     {
@@ -30,5 +30,15 @@ public abstract class ChessPiece
     public void ToggleCanBeCaptured()
     {
         canBeCaptured = !canBeCaptured;
+    }
+
+    public bool CheckHighlight()
+    {
+        return isHighlighted;
+    }
+
+    public bool CheckCanBeCaptured()
+    {
+        return canBeCaptured;
     }
 }

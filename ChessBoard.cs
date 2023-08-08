@@ -44,10 +44,10 @@ public class ChessBoard
             for (int col = 0; col < cols; col++)
             {
                 var isNull = _board[row, col] != null; /* Checks if current square in the array is empty or has a piece in it */
-
+                
                 Console.BackgroundColor =
-                    isNull && _board[row, col].isHighlighted ? ConsoleColor.DarkYellow : /* Checks if the piece is the selected piece (to be moved) */
-                    isNull && _board[row, col].canBeCaptured ? ConsoleColor.Cyan : /* Checks if the current piece can be captured by the selected piece */
+                    isNull && _board[row, col].CheckHighlight() ?  ConsoleColor.DarkYellow : /* Checks if the piece is the selected piece (to be moved) */
+                    isNull && _board[row, col].CheckCanBeCaptured() ? ConsoleColor.Cyan : /* Checks if the current piece can be captured by the selected piece */
                     (row + col) % 2 == 0 ? ConsoleColor.DarkRed : ConsoleColor.Black; /* If there is no piece, the color of the square will alternate between darkRed/Black */
 
                 Console.Write(isNull ? " " + _board[row, col].Piece() + " " : "   "); /* Looks into the array for pieces, then print them. */
@@ -78,13 +78,18 @@ public class ChessBoard
 
         foreach ((int row, int col) in validMoves)
         {
-            var currentPiece = _board[row, col];
-
-            if (currentPiece?.type == PieceType.Marker) _board[row, col] = null;
-            else
+            if (_board[row, col] == null)
             {
-                _board[row, col] = currentPiece ?? new MarkerPiece();
-                currentPiece?.ToggleCanBeCaptured();
+                _board[row, col] = new MarkerPiece();
+            }
+            else if (_board[row, col].type == PieceType.Marker)
+            {
+                _board[row, col] = null;
+            }
+
+            if (_board[row, col] != null && _board[row, col].color == _opponentColor)
+            {
+                _board[row, col].ToggleCanBeCaptured();
             }
         }
     }
@@ -94,9 +99,10 @@ public class ChessBoard
         return validMoves.Contains((selectedRow, selectedCol));
     }
 
+
     public void MovePiece(int pieceRow, int pieceCol, int moveRow, int moveCol)
     {
-        _board[moveRow, moveCol] = new Pawn(PieceColor.White);
+        _board[moveRow, moveCol] = new Pawn(PieceColor.White); /*_board[pieceRow, moveCol];*/
         _board[pieceRow, pieceCol] = null;
         UpdateBoard();
     }
