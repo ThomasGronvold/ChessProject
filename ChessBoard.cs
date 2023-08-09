@@ -4,23 +4,34 @@ namespace ChessProject;
 
 public class ChessBoard
 {
-    private readonly ChessPiece[,] _board;
+    /* Board Fields */
+    private readonly ChessPiece[,] _board; /* A two-dimensional array representing the chess board. */
+    private int boardSize = 8;
     private readonly int rows;
     private readonly int cols;
+
+    /* Chess Piece Fields */
     private readonly bool _playersPieceColor;
     private readonly PieceColor _playerColor;
     private readonly PieceColor _opponentColor;
-    private List<(int, int)> validMoves;
-    private int boardSize = 8;
+    private ChessPiece selectedPiece;
 
+    /* Mechanic Fields */
+    private List<(int, int)> validMoves;
+    
     public ChessBoard(bool playersPieceColor)
     {
+        /* Board Constructors */
         _board = new ChessPiece[boardSize, boardSize];
         rows = _board.GetLength(0);
         cols = _board.GetLength(1);
+
+        /* Chess Piece Constructors */
         _playersPieceColor = playersPieceColor;
         _playerColor = _playersPieceColor ? PieceColor.White : PieceColor.Black;
         _opponentColor = _playersPieceColor ? PieceColor.Black : PieceColor.White;
+
+        /* Function Constructors */
         InitializePieces();
         ReverseRows(_board);
         UpdateBoard();
@@ -57,6 +68,13 @@ public class ChessBoard
         }
         Console.Write(" a  b  c  d  e  f  g  h");
         Console.WriteLine();
+    }
+
+    public void ToggleValidMovesAndHighlight(int ChosenRowCord, int ChosenColCord)
+    { 
+        MarkValidMoves(ChosenRowCord, ChosenColCord);
+        _board[ChosenRowCord, ChosenColCord].ToggleHighlight();
+        selectedPiece = null;
     }
 
     private void ReverseRows<T>(T[,] array)
@@ -102,15 +120,16 @@ public class ChessBoard
 
     public void MovePiece(int pieceRow, int pieceCol, int moveRow, int moveCol)
     {
-        _board[moveRow, moveCol] = new Pawn(PieceColor.White); /*_board[pieceRow, moveCol];*/
+        _board[moveRow, moveCol] = new Pawn(PieceColor.White);
         _board[pieceRow, pieceCol] = null;
-        UpdateBoard();
     }
 
-    public void HighlightPiece(int row, int col)
-    {
-        if (_board[row, col] != null) _board[row, col].ToggleHighlight();
-    }
+    //public void HighlightPiece(int row, int col)
+    //{
+        //selectedPiece = _board[row, col];
+        //_board[row, col].ToggleHighlight();
+        ////if (_board[row, col] != null) _board[row, col].ToggleHighlight();
+    //}
 
     public enum PieceType
     {

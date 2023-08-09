@@ -20,25 +20,37 @@ namespace ChessProject
             while (gameRunning)
             {
                 /* Much repetition, No error handeling, index out of range,   */
+                int ChosenRowCord;
+                int ChosenColCord;
+                //do
+                //{
+                    Console.Write("Piece To Move Cord: ");
+                    var choosePiece = Console.ReadLine();
+                    ChosenRowCord = GetCommandInt(numberRange, choosePiece[1]);
+                    ChosenColCord = GetCommandInt(letterRange, choosePiece[0]);
 
-                Console.Write("Piece To Move Cord: ");
-                var choosePiece = Console.ReadLine();
-                int ChosenRowCord = GetCommandInt(numberRange, choosePiece[1]);
-                int ChosenColCord = GetCommandInt(letterRange, choosePiece[0]);
+                //} while (!chessBoard.IsValidMove(ChosenRowCord, ChosenColCord));
 
-                /* Creates MarkerPieces and highlight selected piece in the 2dArray */
-                chessBoard.HighlightPiece(ChosenRowCord, ChosenColCord);
-                chessBoard.MarkValidMoves(ChosenRowCord, ChosenColCord);
-                
+
+                /* Creates Markers for every valid move and highlight selected piece in the 2dArray, then updates the board */
+
+
+                chessBoard.ToggleValidMovesAndHighlight(ChosenRowCord, ChosenColCord);
+
+                //chessBoard.HighlightPiece(ChosenRowCord, ChosenColCord);
+                //chessBoard.MarkValidMoves(ChosenRowCord, ChosenColCord);
+
+
                 chessBoard.UpdateBoard();
 
                 /* Removes markerpieces and highlight */
-                chessBoard.HighlightPiece(ChosenRowCord, ChosenColCord);
-                chessBoard.MarkValidMoves(ChosenRowCord, ChosenColCord);
+                //chessBoard.HighlightPiece(ChosenRowCord, ChosenColCord);
+                //chessBoard.MarkValidMoves(ChosenRowCord, ChosenColCord);
 
                 /* This Next <-------------- */
                 int moveRowCord;
                 int moveColCord;
+                
                 do
                 {
                     Console.Write("Where To Move Cord: ");
@@ -46,8 +58,10 @@ namespace ChessProject
                     moveRowCord = GetCommandInt(numberRange, moveCord[1]);
                     moveColCord = GetCommandInt(letterRange, moveCord[0]);
                 } while (!chessBoard.IsValidMove(moveRowCord, moveColCord));
-                
+
+                chessBoard.ToggleValidMovesAndHighlight(ChosenRowCord, ChosenColCord);
                 chessBoard.MovePiece(ChosenRowCord, ChosenColCord, moveRowCord, moveColCord);
+                chessBoard.UpdateBoard();
             }
         }
 
