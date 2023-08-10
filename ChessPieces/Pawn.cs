@@ -24,7 +24,8 @@ public class Pawn : ChessPiece
             validMoves.Add((currentRow + 1, currentCol - 1));
         }
 
-        if (currentRow == 1 && (board[currentRow + 1, currentCol] is null || board[currentRow + 1, currentCol] is MarkerPiece) && (board[currentRow + 2, currentCol] is null || board[currentRow + 2, currentCol] is MarkerPiece))
+        if (currentRow == 1 && (board[currentRow + 1, currentCol] is null || board[currentRow + 1, currentCol] is MarkerPiece) &&
+            (board[currentRow + 2, currentCol] is null || board[currentRow + 2, currentCol] is MarkerPiece))
         {
             validMoves.Add((currentRow + 1, currentCol));
             validMoves.Add((currentRow + 2, currentCol));
@@ -42,12 +43,3 @@ public class Pawn : ChessPiece
         return (color == PieceColor.White) ? '♙' : '♟';
     }
 }
-
-/*
-        Pawn
-        Cant make illegal moves (move makes king check)
-        if enemy pawn moved 2 and landed next you your own pawn, you can en passant
-        if enemy piece is on diagonal infront of pawn, it can attack
-        if on start row, can move 2 forward unless blocked
-        else can move 1 forward unless blocked
-*/

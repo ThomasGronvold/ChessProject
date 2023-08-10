@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using static ChessProject.ChessBoard;
 
 namespace ChessProject;
 
@@ -14,11 +15,11 @@ public class ChessBoard
     private readonly bool _playersPieceColor;
     private readonly PieceColor _playerColor;
     private readonly PieceColor _opponentColor;
-    private ChessPiece selectedPiece;
+    //private ChessPiece selectedPiece;
 
     /* Mechanic Fields */
     private List<(int, int)> validMoves;
-    
+
     public ChessBoard(bool playersPieceColor)
     {
         /* Board Constructors */
@@ -74,7 +75,6 @@ public class ChessBoard
     { 
         MarkValidMoves(ChosenRowCord, ChosenColCord);
         _board[ChosenRowCord, ChosenColCord].ToggleHighlight();
-        selectedPiece = null;
     }
 
     private void ReverseRows<T>(T[,] array)
@@ -112,24 +112,24 @@ public class ChessBoard
         }
     }
 
+    public bool IsValidChosenPiece(int selectedRow, int selectedCol)
+    {
+        if (_board[selectedRow, selectedCol] == null) return false;
+        var validChosenPiece = _board[selectedRow, selectedCol].GetValidMoves(_board, selectedRow, selectedCol);
+        if (validChosenPiece.Count == 0 || validChosenPiece == null) return false;
+        return true;
+    }
+
     public bool IsValidMove(int selectedRow, int selectedCol)
     {
         return validMoves.Contains((selectedRow, selectedCol));
     }
-
 
     public void MovePiece(int pieceRow, int pieceCol, int moveRow, int moveCol)
     {
         _board[moveRow, moveCol] = new Pawn(PieceColor.White);
         _board[pieceRow, pieceCol] = null;
     }
-
-    //public void HighlightPiece(int row, int col)
-    //{
-        //selectedPiece = _board[row, col];
-        //_board[row, col].ToggleHighlight();
-        ////if (_board[row, col] != null) _board[row, col].ToggleHighlight();
-    //}
 
     public enum PieceType
     {
