@@ -5,7 +5,8 @@ public abstract class ChessPiece
     /* BaseClass for every chess piece. */
     public ChessBoard.PieceType type { get; }
     public ChessBoard.PieceColor color;
-    protected int pieceValue;
+    public int pieceValue;
+    public bool IsEnPassant { get; private set; }
     protected bool isHighlighted;
     protected bool canBeCaptured;
 
@@ -40,5 +41,16 @@ public abstract class ChessPiece
     public bool CheckCanBeCaptured()
     {
         return canBeCaptured;
+    }
+
+    /* Pawn specific method */
+    public void ToggleEnPassant()
+    {
+        if (type == ChessBoard.PieceType.Pawn) IsEnPassant = !IsEnPassant;
+    }
+
+    public void ClearEnPassant()
+    {
+        IsEnPassant = false;
     }
 }
