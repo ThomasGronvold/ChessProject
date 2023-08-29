@@ -37,22 +37,29 @@ public class ChessBoard
 
     private void InitializePieces()
     {
-        /* Init player Pawns */
+        /* Init Pawns */
         for (int col = 0; col < 8; col++) _board[1, col] = new Pawn(_black);
         for (int col = 0; col < 8; col++) _board[6, col] = new Pawn(_white);
 
-        /* Init player Rooks */
+        /* Init Rooks */
         _board[7, 0] = new Rook(_white);
         _board[7, 7] = new Rook(_white);
         _board[0, 0] = new Rook(_black);
         _board[0, 7] = new Rook(_black);
 
-        /* Init player Knights */
+        /* Init Knights */
         _board[7, 1] = new Knight(_white);
         _board[7, 6] = new Knight(_white);
         _board[0, 1] = new Knight(_black);
         _board[0, 6] = new Knight(_black);
 
+        /* Init Bishops */
+        _board[7, 2] = new Bishop(_white);
+        _board[7, 5] = new Bishop(_white);
+        _board[0, 2] = new Bishop(_black);
+        _board[0, 5] = new Bishop(_black);
+
+        _board[4, 4] = new Bishop(_white);
 
         /* For testing */
         //_board[5, 0] = new Rook(_white);
@@ -164,6 +171,10 @@ public class ChessBoard
         else if (_board[pieceRow, pieceCol].type == PieceType.Knight)
         {
             _board[moveRow, moveCol] = new Knight(color);
+        }
+        else if (_board[pieceRow, pieceCol].type == PieceType.Bishop)
+        {
+            _board[moveRow, moveCol] = new Bishop(color);
         }
 
 
