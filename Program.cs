@@ -11,6 +11,8 @@ namespace ChessProject
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
+            
+            
             bool gameRunning = true;
             var letterRange = GetRange(97, 8); /* The numbers in range represents the letters a to h in ASCII form */
             var numberRange = GetRange(49, 8); /* The numbers in range represents the numbers 1 to 8 in ASCII form */

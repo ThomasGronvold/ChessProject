@@ -40,28 +40,49 @@ public class ChessBoard
         /* Init player Pawns */
         for (int col = 0; col < 8; col++) _board[1, col] = new Pawn(_black);
         for (int col = 0; col < 8; col++) _board[6, col] = new Pawn(_white);
+
+        /* Init player Rooks */
+        _board[7, 0] = new Rook(_white);
+        _board[7, 7] = new Rook(_white);
+        _board[0, 0] = new Rook(_black);
+        _board[0, 7] = new Rook(_black);
+
+        /* Init player Knights */
+        _board[7, 1] = new Knight(_white);
+        _board[7, 6] = new Knight(_white);
+        _board[0, 1] = new Knight(_black);
+        _board[0, 6] = new Knight(_black);
+
+
         /* For testing */
-        _board[3, 6] = new Pawn(_white);
-        _board[4, 1] = new Pawn(_black);
-        _board[3, 1] = new Pawn(_black);
-        _board[4, 3] = new Pawn(_black);
+        //_board[5, 0] = new Rook(_white);
+        //_board[5, 5] = new Rook(_black);
+        //_board[3, 6] = new Pawn(_white);
+        //_board[4, 1] = new Pawn(_black);
+        //_board[3, 1] = new Pawn(_black);
+        //_board[4, 3] = new Pawn(_black);
     }
 
     public void UpdateBoard()
     {
         Console.Clear();
+        //Console.ForegroundColor = ConsoleColor.Black;
         for (int row = rows - 1; row >= 0; row--)
         {
             for (int col = 0; col < cols; col++)
             {
-                var isNull = _board[row, col] != null; /* Checks if current square in the array is empty or has a piece in it */
+                var piece = _board[row, col];
+                var isNull = piece != null; /* Checks if current square in the array is empty or has a piece in it */
 
                 Console.BackgroundColor =
-                    isNull && _board[row, col].CheckHighlight() ? ConsoleColor.DarkYellow : /* Checks if the piece is the selected piece (to be moved) */
-                    isNull && _board[row, col].CheckCanBeCaptured() ? ConsoleColor.Cyan : /* Checks if the current piece can be captured by the selected piece */
-                    (row + col) % 2 == 0 ? ConsoleColor.DarkRed : ConsoleColor.Black; /* If there is no piece, the color of the square will alternate between darkRed/Black */
+                    isNull && piece.CheckHighlight() ? ConsoleColor.DarkYellow : /* Checks if the piece is the selected piece (to be moved) */
+                    isNull && piece.CheckCanBeCaptured() ? ConsoleColor.Cyan : /* Checks if the current piece can be captured by the selected piece */
+                    (row + col) % 2 == 0 ? ConsoleColor.DarkCyan : ConsoleColor.DarkBlue; /* If there is no piece, the color of the square will alternate between darkRed/Black */
 
-                Console.Write(isNull ? " " + _board[row, col].Piece() + " " : "   "); /* Looks into the array for pieces, then print them. */
+                /* Makes the black pieces appear black and not white */
+                Console.ForegroundColor = piece != null && piece.color == PieceColor.Black ? ConsoleColor.Black : ConsoleColor.White;
+
+                Console.Write(isNull ? " " + piece.Piece() + " " : "   "); /* Looks into the array for pieces, then print them. */
             }
             Console.ResetColor();
             Console.WriteLine(" " + (char)('1' + row));
@@ -129,7 +150,22 @@ public class ChessBoard
 
     public void MovePiece(int pieceRow, int pieceCol, int moveRow, int moveCol, bool turnOrder)
     {
-        _board[moveRow, moveCol] = new Pawn((turnOrder ? PieceColor.White : PieceColor.Black));
+        var color = turnOrder ? PieceColor.White : PieceColor.Black;
+
+        /* Creates a new chessPiece at the chosen location */
+        if (_board[pieceRow, pieceCol].type == PieceType.Pawn)
+        {
+            _board[moveRow, moveCol] = new Pawn(color);
+        }
+        else if (_board[pieceRow, pieceCol].type == PieceType.Rook)
+        {
+            _board[moveRow, moveCol] = new Rook(color);
+        }
+        else if (_board[pieceRow, pieceCol].type == PieceType.Knight)
+        {
+            _board[moveRow, moveCol] = new Knight(color);
+        }
+
 
         if (_board[moveRow, moveCol] is Pawn &&
             moveRow - pieceRow == 2 ||
