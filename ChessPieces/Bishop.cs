@@ -13,11 +13,10 @@ public class Bishop : ChessPiece
     {
         var validMoves = new List<(int, int)>();
 
-        // Define all possible bishop move directions (diagonals).
+        // Define all possible bishop move directions, row and col arrays are "connected" on index (diagonals).
         int[] rowDirections = { -1, -1, 1, 1 };
         int[] colDirections = { -1, 1, -1, 1 };
 
-        // Loop through each possible diagonal direction.
         for (int dir = 0; dir < rowDirections.Length; dir++)
         {
             int rowDir = rowDirections[dir];
@@ -26,32 +25,29 @@ public class Bishop : ChessPiece
             int newRow = currentRow + rowDir;
             int newCol = currentCol + colDir;
 
-            // Keep moving along the diagonal until we go out of bounds or hit a piece.
             while (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8)
             {
-                ChessPiece currentIndex = board[newRow, newCol];
+                ChessPiece targetPiece = board[newRow, newCol];
 
-                // If the target square is empty or contains an opponent's piece, it's a valid move.
-                if (board[newRow, newCol] == null || board[newRow, newCol] is MarkerPiece || board[newRow, newCol].color != color)
+                if (targetPiece == null || targetPiece is MarkerPiece)
                 {
                     validMoves.Add((newRow, newCol));
                 }
-
-                // If the target square is not empty, stop moving in this direction.
-                if (board[newRow, newCol] != null)
+                else
                 {
+                    if (targetPiece.color != color)
+                    {
+                        validMoves.Add((newRow, newCol));
+                    }
                     break;
                 }
 
-                // Move to the next square along the diagonal.
                 newRow += rowDir;
                 newCol += colDir;
             }
         }
-
         return validMoves;
     }
-
 
     public override char Piece()
     {
