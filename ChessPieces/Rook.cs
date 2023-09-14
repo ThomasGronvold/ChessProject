@@ -10,7 +10,7 @@ public class Rook : ChessPiece
     {
     }
 
-    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol)
+    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol, bool removeIllegalMoves)
     {
         var validMoves = new List<(int, int)>();
 
@@ -57,7 +57,7 @@ public class Rook : ChessPiece
                 else if (board[currentRow, newCol].color != color)
                 {
                     validMoves.Add((currentRow, newCol));
-                    break;
+                    break; 
                 }
                 else
                 {
@@ -65,6 +65,12 @@ public class Rook : ChessPiece
                 }
             }
         }
+
+        if (removeIllegalMoves)
+        {
+            validMoves = RemoveIllegalMoves(board, validMoves, currentRow, currentCol);
+        }
+        
         return validMoves;
     }
 

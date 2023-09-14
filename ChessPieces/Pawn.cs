@@ -10,7 +10,7 @@ public class Pawn : ChessPiece
     {
     }
 
-    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol)
+    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol, bool removeIllegalMoves)
     {
         var validMoves = new List<(int, int)>();
         int direction = (this.color == PieceColor.White ? 1 : -1);
@@ -21,7 +21,7 @@ public class Pawn : ChessPiece
         if (nextRow >= 0 && nextRow <= 7 && (board[nextRow, currentCol] == null) || (board[nextRow, currentCol] is MarkerPiece))
         {
             if (!validMoves.Contains((nextRow, currentCol))) validMoves.Add((nextRow, currentCol));
-            
+
             //Double Forward Move: A pawn can move two squares forward from its starting position if both the squares in front of it are empty.
             int doublePawnMove = currentRow + 2 * direction;
 
@@ -65,6 +65,12 @@ public class Pawn : ChessPiece
                 }
             }
         }
+
+        if (removeIllegalMoves)
+        {
+            validMoves = RemoveIllegalMoves(board, validMoves, currentRow, currentCol);
+        }
+
         return validMoves;
     }
 

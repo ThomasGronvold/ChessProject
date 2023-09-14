@@ -18,7 +18,7 @@ namespace ChessProject
             var numberRange = GetRange(49, 8); /* The numbers in range represents the numbers 1 to 8 in ASCII form */
 
 
-            var chessBoard = new ChessBoard(true); /* Player side: True = White, False = Black */
+            var chessBoard = new ChessBoard(); /* Player side: True = White, False = Black */
             var turnOrder = true;  /* Player side: True = White, False = Black */
             Regex legalBoardMoves = new Regex("^[a-h][1-8]$");
 
@@ -40,7 +40,8 @@ namespace ChessProject
                         chosenColCord = GetCommandInt(letterRange, choosePiece[0]);
 
                     } while (!legalBoardMoves.IsMatch(choosePiece) ||
-                             !chessBoard.IsValidChosenPiece(chosenRowCord, chosenColCord, turnOrder));
+                             !chessBoard.IsValidChosenPiece(chosenRowCord, chosenColCord, turnOrder)
+                             );
 
                     pieceSelected = true;
                     chessBoard.ToggleValidMovesAndHighlight(chosenRowCord, chosenColCord, turnOrder);
@@ -52,6 +53,8 @@ namespace ChessProject
                         var moveCord = Console.ReadLine();
                         if (moveCord.ToLower() == "back")
                         {
+                            chessBoard.ClearMarkerPieces();
+                            chessBoard.UpdateBoard();
                             pieceSelected = false;
                             break;
                         }
@@ -71,6 +74,7 @@ namespace ChessProject
 
                     chessBoard.ToggleValidMovesAndHighlight(chosenRowCord, chosenColCord, turnOrder);
                     chessBoard.MovePiece(chosenRowCord, chosenColCord, moveRowCord, moveColCord, turnOrder);
+                    chessBoard.ClearMarkerPieces();
                     chessBoard.UpdateBoard();
                     turnOrder = !turnOrder;
                 }

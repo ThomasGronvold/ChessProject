@@ -9,11 +9,11 @@ public class Knight : ChessPiece
     {
     }
 
-    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol)
+    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol, bool removeIllegalMoves)
     {
         var validMoves = new List<(int, int)>();
 
-        // Define all possible knight move offsets.
+        // Define all possible knight moves.
         int[] rowDirections = { -2, -1, 1, 2, 2, 1, -1, -2 };
         int[] colDirections = { 1, 2, 2, 1, -1, -2, -2, -1 };
 
@@ -34,6 +34,11 @@ public class Knight : ChessPiece
                     validMoves.Add((newRow, newCol));
                 }
             }
+        }
+
+        if (removeIllegalMoves)
+        {
+            validMoves = RemoveIllegalMoves(board, validMoves, currentRow, currentCol);
         }
 
         return validMoves;

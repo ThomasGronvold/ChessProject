@@ -6,7 +6,7 @@ public class MarkerPiece : ChessPiece
     {
     }
 
-    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol)
+    public override List<(int, int)> GetValidMoves(ChessPiece[,] board, int currentRow, int currentCol, bool removeIllegalMoves)
     {
         return null!;
     }

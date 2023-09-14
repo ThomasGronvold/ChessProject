@@ -2,10 +2,10 @@
 
 namespace ChessProject;
 
-public class Bishop : ChessPiece
+public class Queen : ChessPiece
 {
-    public Bishop(PieceColor color)
-        : base(PieceType.Bishop, color, 3)
+    public Queen(PieceColor color)
+        : base(PieceType.Queen, color, 9)
     {
     }
 
@@ -13,9 +13,9 @@ public class Bishop : ChessPiece
     {
         var validMoves = new List<(int, int)>();
 
-        // Define all possible bishop move directions, row and col arrays are "connected" on index (diagonals).
-        int[] rowDirections = { -1, -1, 1, 1 };
-        int[] colDirections = { -1, 1, -1, 1 };
+        // Define all possible queen moves, row and col are connected on index.
+        int[] rowDirections = { -1, -1, -1, 0, 1, 1, 1, 0 };
+        int[] colDirections = { -1, 0, 1, 1, 1, 0, -1, -1 };
 
         for (int dir = 0; dir < rowDirections.Length; dir++)
         {
@@ -55,8 +55,9 @@ public class Bishop : ChessPiece
         return validMoves;
     }
 
+
     public override char Piece()
     {
-        return (color == PieceColor.White) ? '♗' : '♝';
+        return (color == PieceColor.White) ? '♕' : '♛';
     }
 }
